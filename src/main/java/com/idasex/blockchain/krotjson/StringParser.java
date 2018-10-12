@@ -16,7 +16,7 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package wf.bitcoin.krotjson;
+package com.idasex.blockchain.krotjson;
 
 /**
  *

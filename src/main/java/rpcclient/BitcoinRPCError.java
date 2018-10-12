@@ -15,35 +15,36 @@
  * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+package rpcclient;
 
-package wf.bitcoin.javabitcoindrpcclient;
-
-import java.util.AbstractList;
-import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author Mikhail Yevchenko m.ṥῥẚɱ.ѓѐḿởύḙ@azazar.com
+ * an object represents the error in a bitcoind rpc call
+ * 
+ * @author frankchen
+ * @create 2018年7月9日 下午8:58:13
  */
-abstract class ListMapWrapper<X> extends AbstractList<X> {
+public class BitcoinRPCError {
+    private int code;
+    private String message;
 
-    public final List<Map> list;
-    
-    public ListMapWrapper(List<Map> list) {
-        this.list = list;
+    @SuppressWarnings({ "rawtypes" })
+    public BitcoinRPCError(Map errorMap) {
+        Number n = (Number) errorMap.get("code");
+        this.code    = n != null ? n.intValue() : 0;
+        this.message = (String) errorMap.get("message");
     }
 
-    protected abstract X wrap(Map m);
-
-    @Override
-    public X get(int index) {
-        return wrap(list.get(index));
+    /**
+     * get the code returned by the bitcoind.<br/>
+     * some of the error codes are defined in {@link BitcoinRPCErrorCode}
+     */
+    public int getCode() {
+        return code;
     }
 
-    @Override
-    public int size() {
-        return list.size();
+    public String getMessage() {
+        return message;
     }
-
 }

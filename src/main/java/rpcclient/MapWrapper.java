@@ -16,7 +16,7 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package wf.bitcoin.javabitcoindrpcclient;
+package rpcclient;
 
 import java.math.BigDecimal;
 import java.util.Date;

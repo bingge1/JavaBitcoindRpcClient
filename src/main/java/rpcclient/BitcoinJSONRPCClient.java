@@ -18,14 +18,12 @@
  /*
  * Repackaged with simple additions for easier maven usage by Alessandro Polverini
  */
-package wf.bitcoin.javabitcoindrpcclient;
+package rpcclient;
 
-import static wf.bitcoin.javabitcoindrpcclient.MapWrapper.mapInt;
-import static wf.bitcoin.javabitcoindrpcclient.MapWrapper.mapStr;
+import static rpcclient.MapWrapper.mapInt;
+import static rpcclient.MapWrapper.mapStr;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -39,13 +37,11 @@ import java.nio.charset.Charset;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,9 +49,8 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 
-import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.LockedUnspent;
-import wf.bitcoin.krotjson.Base64Coder;
-import wf.bitcoin.krotjson.JSON;
+import com.idasex.blockchain.krotjson.Base64Coder;
+import com.idasex.blockchain.krotjson.JSON;
 
 /**
  *
@@ -71,73 +66,17 @@ public class BitcoinJSONRPCClient implements BitcoindRpcClient {
   private URL noAuthURL;
   private String authStr;
 
-  public BitcoinJSONRPCClient(String rpcUrl) throws MalformedURLException {
-    this(new URL(rpcUrl));
+  public BitcoinJSONRPCClient(URL rpc,String authStr) {
+	  this.rpcURL = rpc;
+	  this.authStr = authStr;
+	    try {
+	      noAuthURL = new URI(rpc.getProtocol(), null, rpc.getHost(), rpc.getPort(), rpc.getPath(), rpc.getQuery(), null).toURL();
+	    } catch (MalformedURLException | URISyntaxException ex) {
+	      throw new IllegalArgumentException(rpc.toString(), ex);
+	    }
+	    authStr = rpc.getUserInfo() == null ? null : String.valueOf(Base64Coder.encode(rpc.getUserInfo().getBytes(Charset.forName("ISO8859-1"))));
   }
 
-  public BitcoinJSONRPCClient(URL rpc) {
-    this.rpcURL = rpc;
-    try {
-      noAuthURL = new URI(rpc.getProtocol(), null, rpc.getHost(), rpc.getPort(), rpc.getPath(), rpc.getQuery(), null).toURL();
-    } catch (MalformedURLException | URISyntaxException ex) {
-      throw new IllegalArgumentException(rpc.toString(), ex);
-    }
-    authStr = rpc.getUserInfo() == null ? null : String.valueOf(Base64Coder.encode(rpc.getUserInfo().getBytes(Charset.forName("ISO8859-1"))));
-  }
-
-  public static final URL DEFAULT_JSONRPC_URL;
-  public static final URL DEFAULT_JSONRPC_TESTNET_URL;
-  public static final URL DEFAULT_JSONRPC_REGTEST_URL;
-
-  static {
-    String user = "user";
-    String password = "pass";
-    String host = "localhost";
-    String port = null;
-
-    try {
-      File f;
-      File home = new File(System.getProperty("user.home"));
-
-      if ((f = new File(home, ".bitcoin" + File.separatorChar + "bitcoin.conf")).exists()) {
-      } else if ((f = new File(home, "AppData" + File.separatorChar + "Roaming" + File.separatorChar + "Bitcoin" + File.separatorChar + "bitcoin.conf")).exists()) {
-      } else {
-        f = null;
-      }
-
-      if (f != null) {
-        logger.fine("Bitcoin configuration file found");
-
-        Properties p = new Properties();
-        try (FileInputStream i = new FileInputStream(f)) {
-          p.load(i);
-        }
-
-        user = p.getProperty("rpcuser", user);
-        password = p.getProperty("rpcpassword", password);
-        host = p.getProperty("rpcconnect", host);
-        port = p.getProperty("rpcport", port);
-      }
-    } catch (Exception ex) {
-      logger.log(Level.SEVERE, null, ex);
-    }
-
-    try {
-      DEFAULT_JSONRPC_URL = new URL("http://" + user + ':' + password + "@" + host + ":" + (port == null ? "8332" : port) + "/");
-      DEFAULT_JSONRPC_TESTNET_URL = new URL("http://" + user + ':' + password + "@" + host + ":" + (port == null ? "18332" : port) + "/");
-      DEFAULT_JSONRPC_REGTEST_URL = new URL("http://" + user + ':' + password + "@" + host + ":" + (port == null ? "18443" : port) + "/");
-    } catch (MalformedURLException ex) {
-      throw new RuntimeException(ex);
-    }
-  }
-
-  public BitcoinJSONRPCClient(boolean testNet) {
-    this(testNet ? DEFAULT_JSONRPC_TESTNET_URL : DEFAULT_JSONRPC_URL);
-  }
-
-  public BitcoinJSONRPCClient() {
-    this(DEFAULT_JSONRPC_TESTNET_URL);
-  }
 
   private HostnameVerifier hostnameVerifier = null;
   private SSLSocketFactory sslSocketFactory = null;
@@ -1830,8 +1769,10 @@ public class BitcoinJSONRPCClient implements BitcoindRpcClient {
     Map result = (Map) query("signrawtransaction", hex, pInputs, privateKeys, sigHashType); //if sigHashType is null it will return the default "ALL"
     if ((Boolean) result.get("complete"))
       return (String) result.get("hex");
-    else
+    else {
+    	System.out.println(JSON.stringify(result));
       throw new GenericRpcException("Incomplete");
+    }
   }
 
   public RawTransaction decodeRawTransaction(String hex) throws GenericRpcException {

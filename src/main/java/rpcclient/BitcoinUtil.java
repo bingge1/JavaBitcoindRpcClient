@@ -16,37 +16,25 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package wf.bitcoin.javabitcoindrpcclient;
+package rpcclient;
 
 /**
  *
  * @author Mikhail Yevchenko m.ṥῥẚɱ.ѓѐḿởύḙ@azazar.com
  */
-public class GenericRpcException extends RuntimeException {
-
-    /**
-     * Creates a new instance of
-     * <code>BitcoinException</code> without detail message.
-     */
-    public GenericRpcException() {
+public class BitcoinUtil {
+    
+    public static double normalizeAmount(double amount) {
+        return (long)(0.5d + (amount / 0.00000001)) * 0.00000001;
     }
 
-    /**
-     * Constructs an instance of
-     * <code>BitcoinException</code> with the specified detail message.
-     *
-     * @param msg the detail message.
-     */
-    public GenericRpcException(String msg) {
-        super(msg);
-    }
-
-    public GenericRpcException(Throwable cause) {
-        super(cause);
-    }
-
-    public GenericRpcException(String message, Throwable cause) {
-        super(message, cause);
-    }
+//    public static void main(String[] args) {
+//        NumberFormat f = new DecimalFormat("#.#########");
+//        System.out.println(f.format(normalizeAmount(1d)) + ":\n1");
+//        System.out.println(f.format(normalizeAmount(0.00000001d)) + ":\n0.00000001");
+//        System.out.println(f.format(normalizeAmount(0.000000001d)) + ":\n0");
+//        System.out.println(f.format(normalizeAmount(0.000000006d)) + ":\n0.00000001");
+//        System.out.println(f.format(normalizeAmount(22123123.12312312d)) + ":\n22123123.12312312");
+//    }
 
 }

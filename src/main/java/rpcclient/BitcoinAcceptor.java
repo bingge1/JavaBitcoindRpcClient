@@ -16,7 +16,7 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package wf.bitcoin.javabitcoindrpcclient;
+package rpcclient;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

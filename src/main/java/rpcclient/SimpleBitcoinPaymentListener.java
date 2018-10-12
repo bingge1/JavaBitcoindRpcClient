@@ -1,9 +1,9 @@
 /*
  * Copyright (c) 2013, Mikhail Yevchenko. All rights reserved. PROPRIETARY/CONFIDENTIAL.
  */
-package wf.bitcoin.javabitcoindrpcclient;
+package rpcclient;
 
-import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Transaction;
+import rpcclient.BitcoindRpcClient.Transaction;
 
 /**
  *

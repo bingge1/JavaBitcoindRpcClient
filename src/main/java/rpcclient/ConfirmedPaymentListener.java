@@ -1,12 +1,13 @@
 /*
  * Copyright (c) 2013, Mikhail Yevchenko. All rights reserved. PROPRIETARY/CONFIDENTIAL.
  */
-package wf.bitcoin.javabitcoindrpcclient;
+package rpcclient;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import wf.bitcoin.javabitcoindrpcclient.BitcoindRpcClient.Transaction;
+
+import rpcclient.BitcoindRpcClient.Transaction;
 
 /**
  *

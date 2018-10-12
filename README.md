@@ -7,11 +7,11 @@ It simply a repackaging of the original tool described here https://en.bitcoin.i
 
 Maven
 =====
-The package is published in the wf.bitcoin group and you can add it to you pom.xml adding a section like this:
+The package is published in the com.idasex.blockchain group and you can add it to you pom.xml adding a section like this:
 
 ```
 <dependency>
-    <groupId>wf.bitcoin</groupId>
+    <groupId>com.idasex.blockchain</groupId>
     <artifactId>JavaBitcoindRpcClient</artifactId>
     <version>0.9.13</version>
 </dependency>

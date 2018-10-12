@@ -18,7 +18,7 @@
  /*
  * Repackaged with simple additions for easier maven usage by Alessandro Polverini
  */
-package wf.bitcoin.javabitcoindrpcclient;
+package rpcclient;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
